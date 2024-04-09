@@ -10,7 +10,6 @@ public class FileProcessor {
             return;
         }
 
-        String folderPath = args[0];
         File folder = new File(args[0]);
         System.out.println(folder);
 
