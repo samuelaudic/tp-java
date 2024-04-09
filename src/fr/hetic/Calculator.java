@@ -8,7 +8,6 @@ public class Calculator {
                 return;
             }
 
-            int result = 0;
             int value1 = Integer.parseInt(args[0]);
             int value2 = Integer.parseInt(args[1]);
             String operator = args[2];
@@ -20,7 +19,7 @@ public class Calculator {
                 return;
             }
 
-            result = switch (operator) {
+            int result = switch (operator) {
                 case "+" -> value1 + value2;
                 case "-" -> value1 - value2;
                 case "*" -> value1 * value2;
