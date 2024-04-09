@@ -23,10 +23,13 @@ public class Calculator {
             switch (operator) {
                 case "+":
                     result = value1 + value2;
+                    break;
                 case "-":
                     result = value1 - value2;
+                    break;
                 case "*":
                     result = value1 * value2;
+                    break;
             }
 
             System.out.println("Result: " + result);
