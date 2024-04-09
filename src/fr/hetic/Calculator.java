@@ -13,7 +13,12 @@ public class Calculator {
             int value2 = Integer.parseInt(args[1]);
             String operator = args[2];
 
-            System.out.println(value1 + operator + value2);
+            //System.out.println(value1 + operator + value2);
+
+            if (!isValidOperator(operator)) {
+                System.out.println("Invalid operator: " + operator);
+                return;
+            }
 
             switch (operator) {
                 case "+":
@@ -29,5 +34,9 @@ public class Calculator {
         } catch (NumberFormatException e) {
             System.out.println("Error: Invalid input format. Please enter integer values for <value1> and <value2>.");
         }
+    }
+
+    private static boolean isValidOperator(String operator) {
+        return operator.equals("+") || operator.equals("-") || operator.equals("*");
     }
 }
