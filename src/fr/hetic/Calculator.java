@@ -20,17 +20,15 @@ public class Calculator {
                 return;
             }
 
-            switch (operator) {
-                case "+":
-                    result = value1 + value2;
-                    break;
-                case "-":
-                    result = value1 - value2;
-                    break;
-                case "*":
-                    result = value1 * value2;
-                    break;
-            }
+            result = switch (operator) {
+                case "+" -> value1 + value2;
+                case "-" -> value1 - value2;
+                case "*" -> value1 * value2;
+                default -> {
+                    System.out.println("Invalid operator: " + operator);
+                    yield 0;
+                }
+            };
 
             System.out.println("Result: " + result);
 
