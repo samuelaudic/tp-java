@@ -2,6 +2,8 @@ package fr.hetic;
 
 import java.io.*;
 
+import static fr.hetic.OperationFactory.createOperation;
+
 public class FileProcessor {
 
     // Exception class for line decoding errors
@@ -66,7 +68,7 @@ public class FileProcessor {
                         double operand2 = Double.parseDouble(parts[1].trim());
                         String operator = parts[2].trim();
 
-                        Operation operation = OperationFactory.createOperation(operator);
+                        Operation operation = createOperation(operator);
                         double result = operation.perform(operand1, operand2);
 
                         writer.write(Double.toString(result));
