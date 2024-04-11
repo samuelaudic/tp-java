@@ -1,6 +1,7 @@
 package fr.hetic;
 
 import java.io.*;
+import java.util.Arrays;
 
 import static fr.hetic.OperationFactory.createOperation;
 
@@ -32,15 +33,11 @@ public class FileProcessor {
             return;
         }
 
-        File[] files = folder.listFiles();
+        File[] files = folder.listFiles((dir, name) -> name.endsWith(".op"));
         if (files != null) {
-            for (File file : files) {
-                if (file.isFile() && file.getName().endsWith(".op")) {
-                    processFile(file);
-                }
-            }
+            Arrays.stream(files).forEach(FileProcessor::processFile);
         } else {
-            System.out.println("Erreur lors de la lecture du répertoire.");
+            System.out.println("Error reading directory.");
             throw new AssertionError();
         }
 
