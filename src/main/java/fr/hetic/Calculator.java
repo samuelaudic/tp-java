@@ -1,42 +1,53 @@
 package fr.hetic;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Properties;
+
 public class Calculator {
+
+    /**
+     * Main method to start the application.
+     * Reads configuration from the application.properties file and performs calculations accordingly.
+     *
+     * @param args command-line arguments (not used)
+     */
     public static void main(String[] args) {
         try {
-            if (args.length < 3) {
-                System.out.println("Usage: Calculator <value1> <value2> <operator>");
-                return;
-            }
+            Properties properties = loadProperties();
+            String dataReader = properties.getProperty("data.reader");
+            String[] filePath = {properties.getProperty("filePath")};
 
-            int value1 = Integer.parseInt(args[0]);
-            int value2 = Integer.parseInt(args[1]);
-            String operator = args[2];
-
-            //System.out.println(value1 + operator + value2);
-
-            if (!isValidOperator(operator)) {
-                System.out.println("Invalid operator: " + operator);
-                return;
-            }
-
-            int result = switch (operator) {
-                case "+" -> value1 + value2;
-                case "-" -> value1 - value2;
-                case "*" -> value1 * value2;
-                default -> {
-                    System.out.println("Invalid operator: " + operator);
-                    yield 0;
+            if ("FILE".equals(dataReader)) {
+                // Utiliser le lecteur de fichier
+                FileProcessor.main(filePath);
+            } else if ("JDBC".equals(dataReader)) {
+                // Utiliser le lecteur JDBC
+                try (Connection conn = ConnectionFactory.connect()) {
+                    DatabaseProcessor.process(conn);
+                    System.out.println("process done");
                 }
-            };
-
-            System.out.println("Result: " + result);
-
-        } catch (NumberFormatException e) {
-            System.out.println("Error: Invalid input format. Please enter integer values for <value1> and <value2>.");
+            } else {
+                System.err.println("Invalid data reader specified in application.properties");
+            }
+        } catch (IOException | SQLException e) {
+            System.err.println("Error: " + e.getMessage());
         }
     }
 
-    private static boolean isValidOperator(String operator) {
-        return operator.equals("+") || operator.equals("-") || operator.equals("*");
+    /**
+     * Loads properties from the application.properties file.
+     *
+     * @return Properties object containing the loaded properties
+     * @throws IOException if an error occurs while reading the file
+     */
+    private static Properties loadProperties() throws IOException {
+        Properties properties = new Properties();
+        try (InputStream inputStream = Calculator.class.getClassLoader().getResourceAsStream("application.properties")) {
+            properties.load(inputStream);
+        }
+        return properties;
     }
 }
