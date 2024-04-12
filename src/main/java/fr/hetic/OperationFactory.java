@@ -13,6 +13,7 @@ public class OperationFactory {
             case "+" -> new Addition();
             case "-" -> new Subtraction();
             case "*" -> new Multiplication();
+            case "/" -> new Division();
             default -> throw new IllegalArgumentException("Unsupported operator: " + operator);
         };
     }
