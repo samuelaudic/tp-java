@@ -14,6 +14,7 @@ public class OperationFactory {
             case "-" -> new Subtraction();
             case "*" -> new Multiplication();
             case "/" -> new Division();
+            case "^" -> new Exponentiation();
             default -> throw new IllegalArgumentException("Unsupported operator: " + operator);
         };
     }
