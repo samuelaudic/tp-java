@@ -36,6 +36,9 @@
     <filter-actions connection-id="0cb2c53f-7fd7-4c12-a41b-c949f3350db8" dataset="public.fichier" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="0cb2c53f-7fd7-4c12-a41b-c949f3350db8" dataset="public.ligne" active-filter-id="EMPTY_FILTER" />
   </component>
+  <component name="DBNavigator.Project.ExecutionManager">
+    <retain-sticky-names value="false" />
+  </component>
   <component name="DBNavigator.Project.ObjectQuickFilterManager">
     <last-used-operator value="EQUAL" />
     <filters />
