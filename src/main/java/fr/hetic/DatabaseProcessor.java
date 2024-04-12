@@ -3,27 +3,14 @@ package fr.hetic;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-public class DatabaseConnector {
+public class DatabaseProcessor {
 
-    private static final String url = "jdbc:postgresql://SG-hetic-mt4-java-5275-pgsql-master.servers.mongodirector.com:5432/TP";
-    private static final String user = "etudiant";
-    private static final String password = "MT4@hetic2324";
-
-    public static void main(String[] args) {
-        try (Connection conn = connect()) {
-            process(conn);
-        } catch (SQLException | IOException e) {
-            System.err.println("Error: " + e.getMessage());
-        }
-    }
-
-    private static Connection connect() throws SQLException {
-        return DriverManager.getConnection(url, user, password);
-    }
-
-    private static void process(Connection conn) throws SQLException, IOException {
+    public static void process(Connection conn) throws SQLException, IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("output.res"))) {
             String sql = "SELECT F.NOM, L.PARAM1, L.PARAM2, L.OPERATEUR FROM LIGNE L JOIN FICHIER F ON L.FICHIER_ID = F.ID WHERE F.TYPE = ?";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
