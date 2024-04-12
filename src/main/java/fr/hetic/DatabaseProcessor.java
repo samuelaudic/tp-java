@@ -11,6 +11,7 @@ import java.sql.SQLException;
 public class DatabaseProcessor {
 
     public static void process(Connection conn) throws SQLException, IOException {
+
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("output.res"))) {
             String sql = "SELECT F.NOM, L.PARAM1, L.PARAM2, L.OPERATEUR FROM LIGNE L JOIN FICHIER F ON L.FICHIER_ID = F.ID WHERE F.TYPE = ?";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -26,11 +27,14 @@ public class DatabaseProcessor {
                         double result = operation.perform(param1, param2);
 
                         // Write result to file
+                        System.out.println("line");
                         writer.write("NOM : " + name + ", RESULTAT: " + result);
                         writer.newLine();
                     }
                 }
             }
+        } catch (IOException e) {
+            System.err.println("Erreur lors de la fermeture du BufferedWriter : " + e.getMessage());
         }
     }
 }
