@@ -6,14 +6,24 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
 
-public class DatabaseCalculator {
+public class CalculatorMain {
 
+    /**
+     * Main method to start the application.
+     * Reads configuration from the application.properties file and performs calculations accordingly.
+     *
+     * @param args command-line arguments (not used)
+     */
     public static void main(String[] args) {
         try {
             Properties properties = loadProperties();
             String dataReader = properties.getProperty("data.reader");
+            String[] filePath = {properties.getProperty("filePath")};
 
-            if ("JDBC".equals(dataReader)) {
+            if ("FILE".equals(dataReader)) {
+                // Utiliser le lecteur de fichier
+                FileProcessor.main(filePath);
+            } else if ("JDBC".equals(dataReader)) {
                 // Utiliser le lecteur JDBC
                 try (Connection conn = ConnectionFactory.connect()) {
                     DatabaseProcessor.process(conn);
@@ -27,9 +37,15 @@ public class DatabaseCalculator {
         }
     }
 
+    /**
+     * Loads properties from the application.properties file.
+     *
+     * @return Properties object containing the loaded properties
+     * @throws IOException if an error occurs while reading the file
+     */
     private static Properties loadProperties() throws IOException {
         Properties properties = new Properties();
-        try (InputStream inputStream = DatabaseCalculator.class.getClassLoader().getResourceAsStream("application.properties")) {
+        try (InputStream inputStream = CalculatorMain.class.getClassLoader().getResourceAsStream("application.properties")) {
             properties.load(inputStream);
         }
         return properties;
