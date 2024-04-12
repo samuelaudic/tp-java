@@ -22,7 +22,7 @@ public class DatabaseConnector {
                     int param1 = rs.getInt("PARAM1");
                     int param2 = rs.getInt("PARAM2");
                     String operator = rs.getString("OPERATEUR");
-                    int index = rs.getInt("POSITION");
+                    //int index = rs.getInt("POSITION");
                     String name = rs.getString("NOM");
 
                     Operation operation = OperationFactory.createOperation(operator);
@@ -34,7 +34,7 @@ public class DatabaseConnector {
                 }
             }
         } catch (SQLException | IOException e) {
-            e.printStackTrace();
+            System.out.println("Error: SQLException. " + e);
         }
     }
 }
