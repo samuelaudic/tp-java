@@ -12,29 +12,30 @@ public class DatabaseConnector {
     private static final String password = "MT4@hetic2324";
 
     public static void main(String[] args) {
-        try (Connection conn = DriverManager.getConnection(url, user, password)) {
-            String sql = "SELECT F.NOM, L.PARAM1, L.PARAM2, L.OPERATEUR, L.POSITION FROM LIGNE L JOIN FICHIER F ON L.FICHIER_ID = F.ID WHERE F.TYPE = 'OP'";
-            try (Statement stmt = conn.createStatement();
-                 ResultSet rs = stmt.executeQuery(sql);
-                 BufferedWriter writer = new BufferedWriter(new FileWriter("output.res"))) {
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             BufferedWriter writer = new BufferedWriter(new FileWriter("output.res"))) {
 
-                while (rs.next()) {
-                    int param1 = rs.getInt("PARAM1");
-                    int param2 = rs.getInt("PARAM2");
-                    String operator = rs.getString("OPERATEUR");
-                    //int index = rs.getInt("POSITION");
-                    String name = rs.getString("NOM");
+            String sql = "SELECT F.NOM, L.PARAM1, L.PARAM2, L.OPERATEUR FROM LIGNE L JOIN FICHIER F ON L.FICHIER_ID = F.ID WHERE F.TYPE = ?";
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, "OP");
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    while (rs.next()) {
+                        int param1 = rs.getInt("PARAM1");
+                        int param2 = rs.getInt("PARAM2");
+                        String operator = rs.getString("OPERATEUR");
+                        String name = rs.getString("NOM");
 
-                    Operation operation = OperationFactory.createOperation(operator);
-                    double result = operation.perform(param1, param2);
+                        Operation operation = OperationFactory.createOperation(operator);
+                        double result = operation.perform(param1, param2);
 
-                    // Write result to file
-                    writer.write("NOM : " + name + ", RESULTAT: " + result);
-                    writer.newLine();
+                        // Write result to file
+                        writer.write("NOM : " + name + ", RESULTAT: " + result);
+                        writer.newLine();
+                    }
                 }
             }
         } catch (SQLException | IOException e) {
-            System.out.println("Error: SQLException. " + e);
+            System.err.println("Error: " + e.getMessage());
         }
     }
 }
